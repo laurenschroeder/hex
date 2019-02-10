@@ -20,7 +20,8 @@ void growth() {
 
     Mesh m = new Mesh();
     app.mesh = m;
-    m.addPolygon(regularPentagon(new Vector(width/2,height/2), width/8, 0));
+   // m.addPolygon(regularPentagon(new Vector(width/2,height/2), width/8, 0));
+    m.addPolygon(regularPentagon(new Vector(width/2,height/2), 50, 2));
 
     // Per face data.
     app.distFromRoot = new ArrayList<Integer>();
@@ -69,27 +70,42 @@ void setup() {
     dataSetup();
 }
 
-Poly regularPentagon(Vector center, float radius, float angle) {
+Poly head(Vector center, float radius, float angle) {
     Poly poly = new Poly();
-    for (int i = 0; i < 5; i++) {
-        float theta = i * TWO_PI / 5.0 + angle;
+    for (int i = 0; i < 4; i++) {
+        float theta = i * TWO_PI / 4.0 + angle;
         poly.add(fromRadialCoords(center, radius, theta));
     }
     return poly;
 }
 
-Poly regularPentagonWithEdge(HalfEdge edge) {
+Poly regularPentagon(Vector center, float radius, float angle) {
+    Poly poly = new Poly();
+    for (int i = 0; i < 5; i++) {
+        float theta = i * TWO_PI / 5.0 + angle;
+        if (i == 3) theta = i * TWO_PI / 5.0 + 1.5*angle; //making it irregular
+        if (i == 5) theta = i * TWO_PI / 5.0 + 0.5*angle; //making it irregular
+        poly.add(fromRadialCoords(center, radius, theta));
+    }
+    return poly;
+}
+
+Poly regularPentagonWithEdge(HalfEdge edge) { //backup for regular
     return regularPentagonWithEdge(edge, 1.0, 0.0);
 }
 
 Poly regularPentagonWithEdge(HalfEdge edge, float scaling, float jitter) {
-    Vector start = edge.startVertex();]]]]]]]]]]]]]]
+    Vector start = edge.startVertex();
     Vector end   = edge.endVertex();
     Vector midpoint = start.add(end).mul(0.5f);
     Vector offset  = end.to(start);
     Poly poly = new Poly();
     poly.add(end.get());
     poly.add(start.get());
+        
+    poly.add(end.get());
+    poly.add(start.get());
+   // ellipse(midpoint, midpoint, 5, 6);
 
     Vector cur = start;
     for (int i = 0; i < 3; i++) {
